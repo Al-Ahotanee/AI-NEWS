@@ -1,10 +1,10 @@
 FROM php:8.2-apache-bookworm
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq-dev libpq5 \
+    && apt-get install -y --no-install-recommends libpq-dev libpq5 libcurl4 libcurl4-openssl-dev \
     && docker-php-ext-install -j"$(nproc)" pdo_pgsql curl \
     && a2enmod rewrite \
-    && apt-get purge -y --auto-remove libpq-dev \
+    && apt-get purge -y --auto-remove libpq-dev libcurl4-openssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
