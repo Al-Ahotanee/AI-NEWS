@@ -50,7 +50,7 @@ The health page tests database connectivity, an active RSS source, GDELT, and pr
 
 ## Troubleshooting
 
-If the database health check fails, verify the Neon connection string and `pdo_pgsql`. The Dockerfile installs `libpq-dev` before compiling `pdo_pgsql`; this is required because the extension build needs `libpq-fe.h` and `pg_config`. If an old image is cached, trigger a clean Render rebuild. If discovery returns source failures, inspect the health page and server logs; malformed feeds or publisher rate limits are reported without aborting all other sources. If generation fails, select a configured provider and check its model/account permissions. If a slug conflicts, edit the slug before saving. If Render cannot start the service, verify that the container is using the included entrypoint and that the service is not overriding the port incorrectly.
+If the database health check fails, verify the Neon connection string and `pdo_pgsql`. The Dockerfile installs `libpq-dev` before compiling `pdo_pgsql`; this is required because the extension build needs `libpq-fe.h` and `pg_config`. It also installs `libcurl4-openssl-dev` before compiling PHP cURL because the build requires `libcurl` pkg-config metadata. If an old image is cached, trigger a clean Render rebuild. If discovery returns source failures, inspect the health page and server logs; malformed feeds or publisher rate limits are reported without aborting all other sources. If generation fails, select a configured provider and check its model/account permissions. If a slug conflicts, edit the slug before saving. If Render cannot start the service, verify that the container is using the included entrypoint and that the service is not overriding the port incorrectly.
 
 ## Project structure
 
