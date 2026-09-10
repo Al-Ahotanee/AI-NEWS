@@ -13,7 +13,8 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 COPY . /var/www/html
 COPY docker-entrypoint.sh /usr/local/bin/signaldesk-entrypoint
 
-RUN chmod +x /usr/local/bin/signaldesk-entrypoint \
+RUN mkdir -p /var/www/html/storage \
+    && chmod +x /usr/local/bin/signaldesk-entrypoint \
     && chown -R www-data:www-data /var/www/html/storage
 
 EXPOSE 8080
