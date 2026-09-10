@@ -1,0 +1,10 @@
+ALTER TABLE articles DROP CONSTRAINT IF EXISTS articles_status_check;
+ALTER TABLE articles ADD CONSTRAINT articles_status_check CHECK (status IN ('draft','published','archived'));
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
+ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin','editor'));
+CREATE INDEX IF NOT EXISTS idx_news_external_guid ON news_items(external_guid);
+CREATE INDEX IF NOT EXISTS idx_news_content_hash ON news_items(content_hash);
+CREATE INDEX IF NOT EXISTS idx_articles_slug ON articles(slug);
+CREATE INDEX IF NOT EXISTS idx_articles_status_published ON articles(status,published_at DESC);
+CREATE INDEX IF NOT EXISTS idx_article_sources_news ON article_sources(news_item_id);
+CREATE INDEX IF NOT EXISTS idx_ai_generations_article ON ai_generations(article_id);
