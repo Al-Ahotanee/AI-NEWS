@@ -1,0 +1,11 @@
+{
+  "name": "signaldesk",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/app.css -o ./public/assets/app.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.13",
+    "@tailwindcss/typography": "^0.5.15"
+  }
+}

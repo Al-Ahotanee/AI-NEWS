@@ -1,6 +1,6 @@
 # SignalDesk
 
-SignalDesk is a PHP 8.2/PostgreSQL newsroom platform for discovering current stories, generating original attributed reports, reviewing drafts, and publishing approved articles. It uses PDO, server-rendered HTML, Tailwind CSS via CDN, and vanilla JavaScript. It does not use Laravel, React, Node.js as a backend, SQLite, or WordPress.
+SignalDesk is a PHP 8.2/PostgreSQL newsroom platform for discovering current stories, generating original attributed reports, reviewing drafts, and publishing approved articles. It uses PDO, server-rendered HTML, a compiled Tailwind CSS build, and vanilla JavaScript. It does not use Laravel, React, Node.js as a backend, SQLite, or WordPress. Node.js is used only at build time to compile CSS — never at runtime.
 
 ## Delivered capabilities
 
@@ -8,15 +8,19 @@ The application includes RSS and GDELT discovery, deduplication, source/category
 
 ## Local setup
 
-Requirements are PHP 8.2+, PostgreSQL 14+, and PHP extensions `pdo_pgsql`, `curl`, and `simplexml`.
+Requirements are PHP 8.2+, PostgreSQL 14+, Node.js 20+ (build time only), and PHP extensions `pdo_pgsql`, `curl`, and `simplexml`.
 
 ```bash
+npm install
+npm run build:css   # writes public/assets/app.css; re-run after editing views or src/app.css
 export DATABASE_URL='postgresql://user:password@host/db?sslmode=require'
 export APP_ENV=development
 php database/migrate.php
 php bin-create-admin.php "Editor" editor@example.com
 php -S 0.0.0.0:8000 -t public
 ```
+
+The Docker image builds this same CSS automatically in a Node stage, so `npm run build:css` is only needed for local `php -S` development.
 
 The admin creation command prompts for the password and never requires it as a process argument. It requires at least 12 characters. Visit `/login` after starting the server.
 

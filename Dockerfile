@@ -1,3 +1,13 @@
+FROM node:20-alpine AS assets
+WORKDIR /build
+COPY package.json ./
+RUN npm install
+COPY tailwind.config.js ./
+COPY src ./src
+COPY app/views ./app/views
+COPY public ./public
+RUN mkdir -p public/assets && npm run build:css
+
 FROM php:8.2-apache-bookworm
 
 RUN apt-get update \
@@ -11,6 +21,7 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 COPY . /var/www/html
+COPY --from=assets /build/public/assets/app.css /var/www/html/public/assets/app.css
 COPY docker-entrypoint.sh /usr/local/bin/signaldesk-entrypoint
 
 RUN mkdir -p /var/www/html/storage \
