@@ -11,10 +11,8 @@ function verify_csrf():void{if(!hash_equals($_SESSION['csrf']??'',(string)($_POS
 function redirect(string $p):never{header('Location: '.$p);exit;}
 function flash(?string $m=null,string $type='success'):?array{if($m!==null){$_SESSION['flash']=['message'=>$m,'type'=>$type];return null;} $f=$_SESSION['flash']??null;unset($_SESSION['flash']);return $f;}
 function is_admin():bool{return !empty($_SESSION['admin_id'])&&($_SESSION['admin_role']??'')==='admin';}
-// Emergency open-access mode requested by the owner: admin routes are available
-// without a session. Re-enable the session check before exposing this service
-// to the public internet.
-function require_admin():void{}
+function require_admin():void{if(empty($_SESSION['admin_id'])){redirect('/login');}$u=one_row('SELECT role FROM users WHERE id=?',[$_SESSION['admin_id']]);if(!$u||$u['role']!=='admin'){session_destroy();redirect('/login');}$_SESSION['admin_role']=$u['role'];}
+function one_row(string $sql,array $args=[]):?array{$s=db()->prepare($sql);$s->execute($args);$r=$s->fetch();return $r?:null;}
 function clean_string(mixed $v,int $max=5000):string{return mb_substr(trim((string)$v),0,$max);}
 function valid_url(mixed $v):?string{$v=trim((string)$v);if($v===''||!filter_var($v,FILTER_VALIDATE_URL))return null;$scheme=parse_url($v,PHP_URL_SCHEME);return in_array(strtolower((string)$scheme),['http','https'],true)?$v:null;}
 function slugify(string $s):string{$s=trim(preg_replace('/[^a-z0-9]+/i','-',strtolower($s)),'-');return $s?:'article-'.time();}
