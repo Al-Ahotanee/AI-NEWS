@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Keep Apache from generating its own absolute directory redirect, which can
+# expose Render's private container port. This relative redirect preserves the
+# public host and protocol.
+RewriteRule ^admin$ /admin/ [R=302,L]
+
+# Route the complete admin area (including nested pages such as /admin/ai-studio)
+# to the single front controller. There must be no real public/admin/ directory
+# on disk — if one exists, Apache resolves into it directly during URL-to-file
+# translation and this rule never runs, which is what caused nested admin pages
+# to 404 even with mod_rewrite enabled.
+RewriteRule ^admin(?:/.*)?$ index.php [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
