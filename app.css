@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'DM Sans', sans-serif;
+  }
+  .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .grain {
+    background-image: radial-gradient(#d8d4cb 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Story cards: consistent hover lift + shadow instead of the flat default */
+  .story-card {
+    @apply bg-white rounded-2xl p-6 shadow-card transition-all duration-200 ease-out;
+  }
+  .story-card:hover {
+    @apply shadow-card-hover -translate-y-1;
+  }
+
+  /* Sticky, blurred masthead for the public site */
+  .masthead {
+    @apply sticky top-0 z-30 border-b border-black/10 bg-paper/80 backdrop-blur-md;
+  }
+
+  .btn-primary {
+    @apply bg-ink text-white rounded-lg px-5 py-3 font-semibold transition-colors hover:bg-ink/90;
+  }
+  .btn-accent {
+    @apply bg-signal text-ink rounded-lg px-5 py-3 font-semibold transition-colors hover:brightness-95;
+  }
+
+  .badge {
+    @apply inline-flex items-center text-xs uppercase tracking-wider font-bold text-alert;
+  }
+}
